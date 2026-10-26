@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>مصاريفي الذكي | Masareef AI</title>
+
+  <!-- Apple Web App Metas -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مصاريفي">
+  <meta name="theme-color" content="#0F172A">
+
+  <style>
+    :root {
+      --bg: #0B0F17;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --glass-bg: rgba(15, 23, 42, 0.75);
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --primary: #38BDF8;
+      --primary-hover: #0284C7;
+      --accent-green: #34D399;
+      --accent-red: #F87171;
+      --accent-amber: #FBBF24;
+      --radius: 20px;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    [data-theme="light"] {
+      --bg: #F1F5F9;
+      --card-bg: rgba(255, 255, 255, 0.8);
+      --card-border: rgba(0, 0, 0, 0.08);
+      --glass-bg: rgba(255, 255, 255, 0.85);
+      --text: #0F172A;
+      --text-muted: #64748B;
+      --primary: #0284C7;
+      --primary-hover: #0369A1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 90px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 16px;
+      backdrop-filter: blur(10px);
+    }
+
+    .card-full {
+      grid-column: span 2;
+    }
+
+    .card-title {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .card-amount {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .amount-expense { color: var(--accent-red); }
+    .amount-income { color: var(--accent-green); }
+
+    .ai-box {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(129, 140, 248, 0.15));
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 24px;
+    }
+
+    .ai-box-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10x;
+    }
+
+    .ai-input-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .ai-input {
+      flex: 1;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .ai-input:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #000;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      padding: 0 18px;
+      min-height: 44px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .btn-file {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 0 14px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .tx-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .tx-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+    }
+
+    .tx-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tx-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .tx-details .tx-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .tx-details .tx-date {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .tx-amount {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .modal-content {
+      background: var(--bg);
+      border-top: 1px solid var(--card-border);
+      border-radius: 28px 28px 0 0;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .chat-box {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 16px;
+      max-height: 400px;
+    }
+
+    .msg {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .msg-user {
+      align-self: flex-start;
+      background: var(--primary);
+      color: #000;
+      font-weight: 600;
+    }
+
+    .msg-ai {
+      align-self: flex-end;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0 24px 0;
+      z-index: 40;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .nav-icon {
+      font-size: 22px;
+    }
+
+    .input-field {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      color: var(--text);
+      font-size: 14px;
+      margin-top: 6px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>💎 مصاريفي الذكي</h1>
+    <div class="header-btns">
+      <button class="icon-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+      <button class="icon-btn" onclick="openModal('settingsModal')">⚙️</button>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <div class="overview-grid">
+      <div class="card card-full">
+        <div class="card-title">إجمالي المصاريف هذا الشهر</div>
+        <div class="card-amount amount-expense" id="totalExpense">0.00 ر.س</div>
+      </div>
+      <div class="card">
+        <div class="card-title">عدد العمليات</div>
+        <div class="card-amount" id="totalCount">0</div>
+      </div>
+      <div class="card">
+        <div class="card-title">المتبقي من الميزانية</div>
+        <div class="card-amount amount-income" id="remainingBudget">0.00 ر.س</div>
+      </div>
+    </div>
+
+    <!-- 👉 SMART INPUT BOX (The requested feature) -->
+    <div class="ai-box">
+      <div class="ai-box-title">
+        <span>✨ الإدخال الذكي بالذكاء الاصطناعي</span>
+      </div>
+      <div class="ai-input-group">
+        <input type="text" id="aiText" class="ai-input" placeholder="اكتب أو انسخ رسالة الخصم البنكية...">
+        <label class="btn-file" title="تصوير إيصال">
+          📸
+          <input type="file" id="aiImage" accept="image/*" style="display:none" onchange="processImageInput(this)">
+        </label>
+        <button class="btn-primary" onclick="processTextInput()" id="aiSubmitBtn">إضافة</button>
+      </div>
+    </div>
+
+    <div class="section-title">
+      <span>آخر العمليات</span>
+      <button style="background:none; border:none; color:var(--primary); font-size:13px; cursor:pointer;" onclick="clearAllData()">مسح الكل</button>
+    </div>
+
+    <div class="tx-list" id="txList">
+      <div style="text-align: center; color: var(--text-muted); padding: 30px 0;">
+        لا توجد عمليات مسجلة بعد. استخدم الإدخال الذكي أعلاه!
+      </div>
+    </div>
+
+  </div>
+
+  <!-- AI Financial Advisor Modal -->
+  <div class="modal" id="aiModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>🤖 المستشار المالي الذكي</h3>
+        <button class="icon-btn" onclick="closeModal('aiModal')">✕</button>
+      </div>
+      <div class="chat-box" id="chatBox">
+        <div class="msg msg-ai">
+          أهلاً بك! أنا مستشارك المالي. كيف أستطيع مساعدتك اليوم بناءً على مصاريفك؟
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; margin-top:10px;">
+        <input type="text" id="chatInput" class="ai-input" placeholder="اسأل المستشار...">
+        <button class="btn-primary" onclick="sendChatMessage()">إرسال</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal" id="settingsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>⚙️ إعدادات التطبيق</h3>
+        <button class="icon-btn" onclick="closeModal('settingsModal')">✕</button>
+      </div>
+      <label style="font-size:13px; color:var(--text-muted);">الميزانية الشهرية (ريال):</label>
+      <input type="number" id="budgetInput" class="input-field" placeholder="مثال: 5000">
+      
+      <label style="font-size:13px; color:var(--text-muted);">مفتاح Google Gemini API (مجاني):</label>
+      <input type="password" id="apiKeyInput" class="input-field" placeholder="AIzaSy...">
+      
+      <button class="btn-primary" style="width:100%; justify-content:center;" onclick="saveSettings()">حفظ الإعدادات</button>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('main')">
+      <span class="nav-icon">📊</span>
+      <span>المصاريف</span>
+    </button>
+    <button class="nav-item" onclick="openModal('aiModal')">
+      <span class="nav-icon">🤖</span>
+      <span>المستشار</span>
+    </button>
+    <button class="nav-item" onclick="exportData()">
+      <span class="nav-icon">📥</span>
+      <span>تصدير</span>
+    </button>
+  </nav>
+
+  <script>
+    // State
+    let transactions = JSON.parse(localStorage.getItem('masareef_txs') || '[]');
+    let budget = parseFloat(localStorage.getItem('masareef_budget') || '3000');
+
+    // Init
+    document.getElementById('budgetInput').value = budget;
+    document.getElementById('apiKeyInput').value = apiKey;
+    updateUI();
+
+    function toggleTheme() {
+      const body = document.body;
+      const current = body.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      body.setAttribute('data-theme', next);
+      document.getElementById('themeBtn').textContent = next === 'light' ? '☀️' : '🌙';
+    }
+
+    function openModal(id) {
+      document.getElementById(id).style.display = 'flex';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    function saveSettings() {
+      budget = parseFloat(document.getElementById('budgetInput').value) || 0;
+      apiKey = document.getElementById('apiKeyInput').value.trim();
+      localStorage.setItem('masareef_budget', budget);
+      localStorage.setItem('masareef_apikey', apiKey);
+      updateUI();
+      closeModal('settingsModal');
+      alert('تم حفظ الإعدادات بنجاح!');
+    }
+
+    function updateUI() {
+      const list = document.getElementById('txList');
+      const totalExpenseEl = document.getElementById('totalExpense');
+      const totalCountEl = document.getElementById('totalCount');
+      const remainingBudgetEl = document.getElementById('remainingBudget');
+
+      const total = transactions.reduce((acc, item) => acc + item.amount, 0);
+      totalExpenseEl.textContent = total.toFixed(2) + ' ر.س';
+      totalCountEl.textContent = transactions.length;
+
+      const remaining = budget - total;
+      remainingBudgetEl.textContent = remaining.toFixed(2) + ' ر.س';
+      remainingBudgetEl.className = 'card-amount ' + (remaining >= 0 ? 'amount-income' : 'amount-expense');
+
+      if (transactions.length === 0) {
+        list.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px 0;">لا توجد عمليات مسجلة بعد. استخدم الإدخال الذكي أعلاه!</div>`;
+        return;
+      }
+
+      list.innerHTML = transactions.map((tx, index) => `
+        <div class="tx-item">
+          <div class="tx-info">
+            <div class="tx-icon">${getCategoryIcon(tx.category)}</div>
+            <div class="tx-details">
+              <div class="tx-title">${tx.title}</div>
+              <div class="tx-date">${tx.category} • ${tx.date}</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div class="tx-amount amount-expense">-${tx.amount.toFixed(2)} ر.س</div>
+            <button style="background:none; border:none; color:var(--accent-red); cursor:pointer;" onclick="deleteTx(${index})">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getCategoryIcon(cat) {
+      const map = {
+        'مطاعم': '🍔', 'تسوق': '🛍️', 'فواتير': '⚡', 'سيارة': '🚗',
+        'صحة': '💊', 'ترفيه': '🎬', 'سفر': '✈️', 'عام': '💸'
+      };
+      return map[cat] || '💸';
+    }
+
+    function deleteTx(index) {
+      transactions.splice(index, 1);
+      localStorage.setItem('masareef_txs', JSON.stringify(transactions));
+      updateUI();
+    }
+
+    function clearAllData() {
+      if (confirm('هل أنت تأكد من مسح جميع العمليات؟')) {
+        transactions = [];
+        localStorage.setItem('masareef_txs', JSON.stringify(transactions));
+        updateUI();
+      }
+    }
+
+    // AI API Call via Gemini 3.6 Flash
+    async function callGemini(prompt, base64Image = null) {
+      if (!apiKey) {
+        alert('يرجى إضافة مفتاح Gemini API في الإعدادات أولاً!');
+        openModal('settingsModal');
+        return null;
+      }
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
+      const parts = [{ text: prompt }];
+
+      if (base64Image) {
+        parts.push({
+          inlineData: {
+            mimeType: "image/jpeg",
+            data: base64Image
+          }
+        });
+      }
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts }] })
+        });
+
+        const data = await res.json();
+        return data.candidates[0].content.parts[0].text;
+      } catch (err) {
+        console.error(err);
+        alert('حدث خطأ أثناء التواصل مع الذكاء الاصطناعي');
+        return null;
+      }
+    }
+
+    async function processTextInput() {
+      const input = document.getElementById('aiText');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const btn = document.getElementById('aiSubmitBtn');
+      btn.textContent = 'جاري التحليل...';
+      btn.disabled = true;
+
+      const prompt = `أنت مساعد مالي ذكي. استخرج من النص التالي بيانات العملية المالية وأرجعها بصيغة JSON فقط بهذا الشكل بالضبط بدون أي كلام إضافي:
+      {"title": "اسم الجهة أو الوصف", "amount": 0.00, "category": "مطاعم/تسوق/فواتير/سيارة/عام"}
+
+      النص: "${text}"`;
+
+      const res = await callGemini(prompt);
+      btn.textContent = 'إضافة';
+      btn.disabled = false;
+
+      if (res) {
+        try {
+          const cleanJson = res.replace(/```json|```/g, '').trim();
+          const parsed = JSON.parse(cleanJson);
+          addTransaction(parsed.title, parsed.amount, parsed.category);
+          input.value = '';
+        } catch (e) {
+          alert('تعذر فهم النص تلقائياً، يرجى المحاولة بشكل أوضح');
+        }
+      }
+    }
+
+    function addTransaction(title, amount, category) {
+      const tx = {
+        title: title || 'مصروف عام',
+        amount: parseFloat(amount) || 0,
+        category: category || 'عام',
+        date: new Date().toLocaleDateString('ar-SA')
+      };
+
+      transactions.unshift(tx);
+      localStorage.setItem('masareef_txs', JSON.stringify(transactions));
+      updateUI();
+    }
+
+    async function processImageInput(fileInput) {
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function (e) {
+        const base64 = e.target.result.split(',')[1];
+        const prompt = `حلل صورة هذا الإيصال البنكي واستخرج منه بيانات العملية وأرجعها بصيغة JSON فقط:
+        {"title": "اسم التاجر", "amount": 0.00, "category": "مطاعم/تسوق/فواتير/سيارة/عام"}`;
+
+        alert('جاري قراءة الإيصال بالذكاء الاصطناعي...');
+        const res = await callGemini(prompt, base64);
+        if (res) {
+          try {
+            const cleanJson = res.replace(/```json|```/g, '').trim();
+            const parsed = JSON.parse(cleanJson);
+            addTransaction(parsed.title, parsed.amount, parsed.category);
+            alert('تمت إضافة العملية من الإيصال بنجاح!');
+          } catch (err) {
+            alert('تعذر استخراج البيانات من الصورة');
+          }
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const chatBox = document.getElementById('chatBox');
+      chatBox.innerHTML += `<div class="msg msg-user">${text}</div>`;
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      const context = JSON.stringify(transactions);
+      const prompt = `أنت مستشار مالي شخصي ذكي. هذه هي قائمة مصاريف المستخدم الحالية: ${context}. الميزانية الشهرية: ${budget} ريال.
+      أجب عن سؤال المستخدم باختصار، وبأسلوب عملي ومباشر باللغة العربية: "${text}"`;
+
+      chatBox.innerHTML += `<div class="msg msg-ai" id="loadingMsg">جاري التفكير...</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      const res = await callGemini(prompt);
+      document.getElementById('loadingMsg').remove();
+
+      if (res) {
+        chatBox.innerHTML += `<div class="msg msg-ai">${res}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    }
+
+    function exportData() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(transactions, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `masareef_backup_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+  </script>
+</body>
+</html>
